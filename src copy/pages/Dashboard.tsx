@@ -25,7 +25,7 @@ const MUSCLE: Record<string, { color: string; light: string }> = {
 const MUSCLE_IMGS: Record<string, string> = {
   Chest:     'https://static.bodyspec.com/tr/4d/d0/4dd012ca7aba1bab?w=1536&h=690&f=jpg',
   Legs:      'https://cdn.shopify.com/s/files/1/0723/5334/9921/files/ChatGPT_Image_Jul_29_2025_08_52_10_PM_1024x1024.webp?v=1753836789',
-  Back:      'https://images.unsplash.com/photo-1603287681836-b174ce5074c2?w=300&q=80',
+  Back:      'https://images.unsplash.com/photo-1588286840104-8957b019727f?w=300&q=80',
   Shoulders: 'https://liftmanual.com/wp-content/uploads/2026/05/best-shoulder-workouts-with-dumbbells.jpg',
   Arms:      'https://www.dmoose.com/cdn/shop/articles/dumbbell_arm_exercises_cc9c6157-0642-455e-a0d9-6c78d9cb2481.png?v=1776261951',
   Core:      'https://dumbbellsdirect.com/cdn/shop/articles/Barbell_Ab_Workout__Strengthen_Your_Core_With_Powerful_Loaded_Movements_800x800.jpg?v=1777450298',
@@ -115,14 +115,6 @@ export default function Dashboard() {
     setView('workouts')
   }
 
-  const deleteWorkout = async (id: number, title: string) => {
-    if (!confirm(`Delete "${title}"?`)) return
-    try {
-      await API.delete(`/workouts/${id}`)
-      setWorkouts(prev => prev.filter(w => w.id !== id))
-    } catch {}
-  }
-
   const saveExercise = async () => {
     if (!exName.trim()) return
     setSavingEx(true)
@@ -162,6 +154,7 @@ export default function Dashboard() {
 
   return (
     <div style={s.page}>
+      {/* Sidebar */}
       <aside style={s.sidebar}>
         <div style={s.sideTop}><span style={s.sideLogo}>GYMLOG</span></div>
         <nav style={s.sideNav}>
@@ -202,10 +195,10 @@ export default function Dashboard() {
 
             <div style={s.statsGrid}>
               {[
-                { label: 'Workouts',      value: workouts.length,                unit: 'sessions',     color: '#3b82f6' },
-                { label: 'Total Sets',    value: totalSets,                       unit: 'sets logged',  color: '#10b981' },
-                { label: 'Peak Weight',   value: `${maxWeight}kg`,               unit: 'personal best',color: '#f59e0b' },
-                { label: 'Muscle Groups', value: Object.keys(muscleCount).length, unit: 'trained',      color: '#a855f7' },
+                { label: 'Workouts',      value: workouts.length,                    unit: 'sessions',     color: '#3b82f6' },
+                { label: 'Total Sets',    value: totalSets,                           unit: 'sets logged',  color: '#10b981' },
+                { label: 'Peak Weight',   value: `${maxWeight}kg`,                    unit: 'personal best',color: '#f59e0b' },
+                { label: 'Muscle Groups', value: Object.keys(muscleCount).length,     unit: 'trained',      color: '#a855f7' },
               ].map(stat => (
                 <div key={stat.label} style={s.statCard}>
                   <div style={{ ...s.statDot, background: stat.color }} />
@@ -307,14 +300,9 @@ export default function Dashboard() {
                     </p>
                     {w.notes && <p style={{ margin: '4px 0 0', fontSize: '13px', color: '#6b7280', fontStyle: 'italic' }}>{w.notes}</p>}
                   </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <span style={{ ...s.muscleBadge, background: '#f1f5f9', color: '#64748b' }}>
-                      {w.workoutExercises.length} exercise{w.workoutExercises.length !== 1 ? 's' : ''}
-                    </span>
-                    <button style={s.deleteBtn} onClick={() => deleteWorkout(w.id, w.title)}>
-                      Delete
-                    </button>
-                  </div>
+                  <span style={{ ...s.muscleBadge, background: '#f1f5f9', color: '#64748b' }}>
+                    {w.workoutExercises.length} exercise{w.workoutExercises.length !== 1 ? 's' : ''}
+                  </span>
                 </div>
                 {w.workoutExercises.length > 0 && (
                   <>
@@ -462,8 +450,11 @@ export default function Dashboard() {
 }
 
 const s: Record<string, React.CSSProperties> = {
-  page:         { display: 'flex', minHeight: '100vh', backgroundColor: '#f8fafc', fontFamily: "'Inter', system-ui, sans-serif" },
-  sidebar:      { width: '220px', backgroundColor: '#0a0f1e', display: 'flex', flexDirection: 'column', flexShrink: 0, position: 'sticky', top: 0, height: '100vh' },
+  page: { display: 'flex', minHeight: '100vh', backgroundColor: '#f8fafc', fontFamily: "'Inter', system-ui, sans-serif" },
+  sidebar: {
+    width: '220px', backgroundColor: '#0a0f1e', display: 'flex',
+    flexDirection: 'column', flexShrink: 0, position: 'sticky', top: 0, height: '100vh',
+  },
   sideTop:      { padding: '1.5rem 1.5rem 1rem' },
   sideLogo:     { fontSize: '13px', fontWeight: 800, letterSpacing: '3px', color: '#ffffff' },
   sideNav:      { flex: 1, padding: '0.5rem' },
@@ -516,5 +507,4 @@ const s: Record<string, React.CSSProperties> = {
   primaryBtn:   { padding: '10px 20px', background: '#0a0f1e', border: 'none', borderRadius: '10px', color: 'white', fontSize: '14px', fontWeight: 600, cursor: 'pointer' },
   ghostBtn:     { display: 'block', width: '100%', padding: '10px', background: 'transparent', border: '1px solid #e5e7eb', borderRadius: '10px', color: '#374151', fontSize: '14px', cursor: 'pointer' },
   smallBtn:     { padding: '6px 14px', background: '#0a0f1e', border: 'none', borderRadius: '8px', color: 'white', fontSize: '12px', fontWeight: 600, cursor: 'pointer' },
-  deleteBtn:    { padding: '6px 12px', background: 'rgba(239,68,68,0.08)', border: '0.5px solid rgba(239,68,68,0.2)', borderRadius: '8px', color: '#ef4444', fontSize: '12px', fontWeight: 600, cursor: 'pointer' },
 }
