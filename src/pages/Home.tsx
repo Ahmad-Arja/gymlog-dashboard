@@ -9,7 +9,7 @@ const FEATURE_IMGS = [
 ]
 
 const MUSCLES = [
-  { name: 'Chest',     img: 'https://static.bodyspec.com/tr/4d/d0/4dd012ca7aba1bab?w=1536&h=690&f=jpg' },
+  { name: 'Chest',     img: 'https://hips.hearstapps.com/hmg-prod/images/man-doing-dumbbell-incline-bench-press-workout-royalty-free-image-522600373-1540485179.png?crop=0.668xw:1.00xh;0.167xw,0&resize=1200:*' },
   { name: 'Back',      img: 'https://images.unsplash.com/photo-1603287681836-b174ce5074c2?w=300&q=80' },
   { name: 'Legs',      img: 'https://cdn.shopify.com/s/files/1/0723/5334/9921/files/ChatGPT_Image_Jul_29_2025_08_52_10_PM_1024x1024.webp?v=1753836789' },
   { name: 'Shoulders', img: 'https://liftmanual.com/wp-content/uploads/2026/05/best-shoulder-workouts-with-dumbbells.jpg' },
